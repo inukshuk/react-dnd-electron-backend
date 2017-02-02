@@ -169,11 +169,11 @@ export default class ElectronBackend {
     );
   }
 
-  beginDragNativeItem(type) {
+  beginDragNativeItem(type, dataTransfer) {
     this.clearCurrentDragSourceNode();
 
     const SourceType = createNativeDragSource(type);
-    this.currentNativeSource = new SourceType();
+    this.currentNativeSource = new SourceType(dataTransfer);
     this.currentNativeHandle = this.registry.addSource(type, this.currentNativeSource);
     this.actions.beginDrag([this.currentNativeHandle]);
   }
@@ -314,7 +314,7 @@ export default class ElectronBackend {
       }
     } else if (nativeType) {
       // A native item (such as URL) dragged from inside the document
-      this.beginDragNativeItem(nativeType);
+      this.beginDragNativeItem(nativeType, dataTransfer);
     } else if (
       !dataTransfer.types && (
         !e.target.hasAttribute ||
@@ -353,7 +353,7 @@ export default class ElectronBackend {
 
     if (nativeType) {
       // A native item (such as file or URL) dragged from outside the document
-      this.beginDragNativeItem(nativeType);
+      this.beginDragNativeItem(nativeType, dataTransfer);
     }
   }
 
@@ -448,10 +448,6 @@ export default class ElectronBackend {
   handleTopDropCapture(e) {
     this.dropTargetIds = [];
     e.preventDefault();
-
-    if (this.isDraggingNativeItem()) {
-      this.currentNativeSource.mutateItemByReadingDataTransfer(e.dataTransfer);
-    }
 
     this.enterLeaveCounter.reset();
   }

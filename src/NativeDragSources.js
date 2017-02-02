@@ -39,20 +39,10 @@ export function createNativeDragSource(type) {
   } = nativeTypesConfig[type];
 
   return class NativeDragSource {
-    constructor() {
+    constructor(dataTransfer) {
       this.item = {
-        get [exposeProperty]() {
-          console.warn( // eslint-disable-line no-console
-            `Browser doesn't allow reading "${exposeProperty}" until the drop event.`,
-          );
-          return null;
-        },
+        [exposeProperty]: getData(dataTransfer, matchesTypes),
       };
-    }
-
-    mutateItemByReadingDataTransfer(dataTransfer) {
-      delete this.item[exposeProperty];
-      this.item[exposeProperty] = getData(dataTransfer, matchesTypes);
     }
 
     canDrag() {
