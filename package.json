@@ -1,12 +1,11 @@
 {
-  "name": "react-dnd-html5-backend",
-  "version": "2.1.2",
-  "description": "HTML5 backend for React DnD",
+  "name": "react-dnd-electron-backend",
+  "version": "1.0.0",
+  "description": "Electron backend for React DnD",
   "main": "lib/index.js",
   "scripts": {
     "clean": "rimraf lib",
     "build:lib": "babel src --out-dir lib",
-    "build:umd": "webpack",
     "build": "npm-run-all --parallel build:*",
     "lint": "eslint .",
     "unit_test": "mocha --require babel-register --recursive",
@@ -17,20 +16,19 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/react-dnd/react-dnd-html5-backend.git"
+    "url": "https://github.com/inukshuk/react-dnd-electron-backend.git"
   },
   "author": "Dan Abramov <dan.abramov@me.com> (http://github.com/gaearon)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/react-dnd/react-dnd-html5-backend/issues"
+    "url": "https://github.com/inukshuk/react-dnd-electron-backend/issues"
   },
-  "homepage": "https://github.com/react-dnd/react-dnd-html5-backend",
+  "homepage": "https://github.com/inukshuk/react-dnd-electron-backend",
   "devDependencies": {
     "babel-cli": "^6.22.2",
     "babel-eslint": "^7.1.1",
     "babel-loader": "^6.2.10",
-    "babel-preset-latest": "^6.22.0",
-    "babel-preset-stage-2": "^6.22.0",
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.22.0",
     "babel-register": "^6.22.0",
     "eslint": "^3.14.0",
     "eslint-config-airbnb": "^14.0.0",
@@ -40,8 +38,7 @@
     "expect.js": "^0.3.1",
     "mocha": "^3.2.0",
     "npm-run-all": "^4.0.1",
-    "rimraf": "^2.4.3",
-    "webpack": "^1.12.2"
+    "rimraf": "^2.4.3"
   },
   "dependencies": {
     "lodash": "^4.2.0"

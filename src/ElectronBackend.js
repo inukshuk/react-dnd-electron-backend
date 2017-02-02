@@ -6,7 +6,7 @@ import { getNodeClientOffset, getEventClientOffset, getDragPreviewOffset } from 
 import { createNativeDragSource, matchNativeItemType } from './NativeDragSources';
 import * as NativeTypes from './NativeTypes';
 
-export default class HTML5Backend {
+export default class ElectronBackend {
   constructor(manager) {
     this.actions = manager.getActions();
     this.monitor = manager.getMonitor();
@@ -45,7 +45,7 @@ export default class HTML5Backend {
     }
 
     if (this.window.__isReactDndBackendSetUp) { // eslint-disable-line no-underscore-dangle
-      throw new Error('Cannot have two HTML5 backends at the same time.');
+      throw new Error('Cannot have two Electron backends at the same time.');
     }
     this.window.__isReactDndBackendSetUp = true; // eslint-disable-line no-underscore-dangle
     this.addEventListeners(this.window);
