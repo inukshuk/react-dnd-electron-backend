@@ -10,7 +10,7 @@ export default class ElectronBackend {
     this.actions = manager.getActions();
     this.monitor = manager.getMonitor();
     this.registry = manager.getRegistry();
-    //this.context = manager.getContext();
+    // this.context = manager.getContext();
 
     this.sourcePreviewNodes = {};
     this.sourcePreviewNodeOptions = {};
@@ -29,7 +29,6 @@ export default class ElectronBackend {
     this.handleTopDragOverCapture = this.handleTopDragOverCapture.bind(this);
     this.handleTopDrop = this.handleTopDrop.bind(this);
     this.handleTopDropCapture = this.handleTopDropCapture.bind(this);
-    this.handleSelectStart = this.handleSelectStart.bind(this);
     this.endDragIfSourceWasRemovedFromDOM = this.endDragIfSourceWasRemovedFromDOM.bind(this);
     this.endDragNativeItem = this.endDragNativeItem.bind(this);
   }
@@ -101,18 +100,15 @@ export default class ElectronBackend {
     this.sourceNodeOptions[sourceId] = options;
 
     const handleDragStart = e => this.handleDragStart(e, sourceId);
-    const handleSelectStart = e => this.handleSelectStart(e, sourceId);
 
     node.setAttribute('draggable', true);
     node.addEventListener('dragstart', handleDragStart);
-    node.addEventListener('selectstart', handleSelectStart);
 
     return () => {
       delete this.sourceNodes[sourceId];
       delete this.sourceNodeOptions[sourceId];
 
       node.removeEventListener('dragstart', handleDragStart);
-      node.removeEventListener('selectstart', handleSelectStart);
       node.setAttribute('draggable', false);
     };
   }
@@ -288,13 +284,6 @@ export default class ElectronBackend {
           anchorPoint,
         );
         dataTransfer.setDragImage(dragPreview, dragPreviewOffset.x, dragPreviewOffset.y);
-      }
-
-      try {
-        // Firefox won't drag without setting data
-        dataTransfer.setData('application/json', {});
-      } catch (err) {
-        // IE doesn't support MIME types in setData
       }
 
       // Store drag source node so we can check whether
@@ -485,30 +474,5 @@ export default class ElectronBackend {
     } else {
       this.endDragIfSourceWasRemovedFromDOM();
     }
-  }
-
-  handleSelectStart(e) {
-    const { target } = e;
-
-    // Only IE requires us to explicitly say
-    // we want drag drop operation to start
-    if (typeof target.dragDrop !== 'function') {
-      return;
-    }
-
-    // Inputs and textareas should be selectable
-    if (
-      target.tagName === 'INPUT' ||
-      target.tagName === 'SELECT' ||
-      target.tagName === 'TEXTAREA' ||
-      target.isContentEditable
-    ) {
-      return;
-    }
-
-    // For other targets, ask IE
-    // to enable drag and drop
-    e.preventDefault();
-    target.dragDrop();
   }
 }
