@@ -1,7 +1,6 @@
 /* eslint
    no-mixed-operators: off
 */
-import { isSafari, isFirefox } from './BrowserDetector';
 import MonotonicInterpolant from './MonotonicInterpolant';
 
 const ELEMENT_NODE = 1;
@@ -30,7 +29,6 @@ export function getDragPreviewOffset(sourceNode, dragPreview, clientOffset, anch
   // The browsers will use the image intrinsic size under different conditions.
   // Firefox only cares if it's an image, but WebKit also wants it to be detached.
   const isImage = dragPreview.nodeName === 'IMG' && (
-    isFirefox() ||
     !document.documentElement.contains(dragPreview)
   );
   const dragPreviewNode = isImage ? sourceNode : dragPreview;
@@ -44,17 +42,8 @@ export function getDragPreviewOffset(sourceNode, dragPreview, clientOffset, anch
   const { offsetWidth: sourceWidth, offsetHeight: sourceHeight } = sourceNode;
   const { anchorX, anchorY } = anchorPoint;
 
-  let dragPreviewWidth = isImage ? dragPreview.width : sourceWidth;
-  let dragPreviewHeight = isImage ? dragPreview.height : sourceHeight;
-
-  // Work around @2x coordinate discrepancies in browsers
-  if (isSafari() && isImage) {
-    dragPreviewHeight /= window.devicePixelRatio;
-    dragPreviewWidth /= window.devicePixelRatio;
-  } else if (isFirefox() && !isImage) {
-    dragPreviewHeight *= window.devicePixelRatio;
-    dragPreviewWidth *= window.devicePixelRatio;
-  }
+  const dragPreviewWidth = isImage ? dragPreview.width : sourceWidth;
+  const dragPreviewHeight = isImage ? dragPreview.height : sourceHeight;
 
   // Interpolate coordinates depending on anchor point
   // If you know a simpler way to do this, let me know
@@ -75,13 +64,7 @@ export function getDragPreviewOffset(sourceNode, dragPreview, clientOffset, anch
     offsetFromDragPreview.y + dragPreviewHeight - sourceHeight,
   ]);
   const x = interpolantX.interpolate(anchorX);
-  let y = interpolantY.interpolate(anchorY);
-
-  // Work around Safari 8 positioning bug
-  if (isSafari() && isImage) {
-    // We'll have to wait for @3x to see if this is entirely correct
-    y += (window.devicePixelRatio - 1) * dragPreviewHeight;
-  }
+  const y = interpolantY.interpolate(anchorY);
 
   return { x, y };
 }

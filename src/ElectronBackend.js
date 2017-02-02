@@ -1,7 +1,6 @@
 import defaults from 'lodash/defaults';
 import shallowEqual from './shallowEqual';
 import EnterLeaveCounter from './EnterLeaveCounter';
-import { isFirefox } from './BrowserDetector';
 import { getNodeClientOffset, getEventClientOffset, getDragPreviewOffset } from './OffsetUtils';
 import { createNativeDragSource, matchNativeItemType } from './NativeDragSources';
 import * as NativeTypes from './NativeTypes';
@@ -181,21 +180,11 @@ export default class ElectronBackend {
     this.currentNativeSource = new SourceType();
     this.currentNativeHandle = this.registry.addSource(type, this.currentNativeSource);
     this.actions.beginDrag([this.currentNativeHandle]);
-
-    // On Firefox, if mousemove fires, the drag is over but browser failed to tell us.
-    // This is not true for other browsers.
-    if (isFirefox()) {
-      this.window.addEventListener('mousemove', this.endDragNativeItem, true);
-    }
   }
 
   endDragNativeItem() {
     if (!this.isDraggingNativeItem()) {
       return;
-    }
-
-    if (isFirefox()) {
-      this.window.removeEventListener('mousemove', this.endDragNativeItem, true);
     }
 
     this.actions.endDrag();
@@ -392,15 +381,9 @@ export default class ElectronBackend {
       return;
     }
 
-    if (!isFirefox()) {
-      // Don't emit hover in `dragenter` on Firefox due to an edge case.
-      // If the target changes position as the result of `dragenter`, Firefox
-      // will still happily dispatch `dragover` despite target being no longer
-      // there. The easy solution is to only fire `hover` in `dragover` on FF.
-      this.actions.hover(dragEnterTargetIds, {
-        clientOffset: getEventClientOffset(e),
-      });
-    }
+    this.actions.hover(dragEnterTargetIds, {
+      clientOffset: getEventClientOffset(e),
+    });
 
     const canDrop = dragEnterTargetIds.some(
       targetId => this.monitor.canDropOnTarget(targetId),
