@@ -10,7 +10,7 @@ export default class ElectronBackend {
     this.actions = manager.getActions();
     this.monitor = manager.getMonitor();
     this.registry = manager.getRegistry();
-    // this.context = manager.getContext();
+    this.context = manager.getContext();
 
     this.sourcePreviewNodes = {};
     this.sourcePreviewNodeOptions = {};
@@ -34,7 +34,7 @@ export default class ElectronBackend {
   }
 
   get window() {
-    return /* (this.context && this.context.window) || */ window;
+    return (this.context && this.context.window) || window;
   }
 
   setup() {
