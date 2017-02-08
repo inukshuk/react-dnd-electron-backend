@@ -38,7 +38,7 @@ export default class ElectronBackend {
       return this.context.window;
     }
 
-    if (typeof this.window !== 'undefined') {
+    if (typeof window !== 'undefined') {
       return window;
     }
 
