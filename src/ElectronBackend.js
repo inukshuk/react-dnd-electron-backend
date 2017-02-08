@@ -34,11 +34,19 @@ export default class ElectronBackend {
   }
 
   get window() {
-    return (this.context && this.context.window) || window;
+    if (this.context) {
+      return this.context.window;
+    }
+
+    if (typeof this.window !== 'undefined') {
+      return window;
+    }
+
+    return undefined;
   }
 
   setup() {
-    if (typeof this.window === 'undefined') {
+    if (this.window === undefined) {
       return;
     }
 
@@ -50,7 +58,7 @@ export default class ElectronBackend {
   }
 
   teardown() {
-    if (typeof this.window === 'undefined') {
+    if (this.window === undefined) {
       return;
     }
 
