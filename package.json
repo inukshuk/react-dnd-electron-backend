@@ -1,6 +1,6 @@
 {
   "name": "react-dnd-electron-backend",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Electron backend for React DnD",
   "main": "lib/index.js",
   "scripts": {
