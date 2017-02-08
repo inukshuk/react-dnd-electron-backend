@@ -34,7 +34,7 @@ export default class ElectronBackend {
   }
 
   get window() {
-    if (this.context) {
+    if (this.context && this.context.window) {
       return this.context.window;
     }
 
