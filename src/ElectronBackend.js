@@ -18,6 +18,16 @@ export default class ElectronBackend {
     this.sourceNodeOptions = {};
     this.enterLeaveCounter = new EnterLeaveCounter();
 
+    this.dragStartSourceIds = [];
+    this.dropTargetIds = [];
+    this.dragEnterTargetIds = [];
+    this.currentNativeSource = null;
+    this.currentNativeHandle = null;
+    this.currentDragSourceNode = null;
+    this.currentDragSourceNodeOffset = null;
+    this.currentDragSourceNodeOffsetChanged = false;
+    this.altKeyPressed = false;
+
     this.getSourceClientOffset = this.getSourceClientOffset.bind(this);
     this.handleTopDragStart = this.handleTopDragStart.bind(this);
     this.handleTopDragStartCapture = this.handleTopDragStartCapture.bind(this);
@@ -142,7 +152,7 @@ export default class ElectronBackend {
     const sourceNodeOptions = this.sourceNodeOptions[sourceId];
 
     return defaults(sourceNodeOptions || {}, {
-      dropEffect: 'move',
+      dropEffect: this.altKeyPressed ? 'copy' : 'move',
     });
   }
 
@@ -378,6 +388,8 @@ export default class ElectronBackend {
       return;
     }
 
+    this.altKeyPressed = e.altKey;
+
     this.actions.hover(dragEnterTargetIds, {
       clientOffset: getEventClientOffset(e),
     });
@@ -412,6 +424,8 @@ export default class ElectronBackend {
       e.dataTransfer.dropEffect = 'none';
       return;
     }
+
+    this.altKeyPressed = e.altKey;
 
     this.actions.hover(dragOverTargetIds, {
       clientOffset: getEventClientOffset(e),
@@ -471,7 +485,7 @@ export default class ElectronBackend {
     this.actions.hover(dropTargetIds, {
       clientOffset: getEventClientOffset(e),
     });
-    this.actions.drop();
+    this.actions.drop({ dropEffect: this.getCurrentDropEffect() });
 
     if (this.isDraggingNativeItem()) {
       this.endDragNativeItem();
