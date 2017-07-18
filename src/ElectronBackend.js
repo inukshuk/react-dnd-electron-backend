@@ -307,13 +307,13 @@ export default class ElectronBackend {
           dragPreview,
           clientOffset,
           anchorPoint,
-          offsetPoint
+          offsetPoint,
         );
 
         dataTransfer.setDragImage(
           dragPreview,
           dragPreviewOffset.x,
-          dragPreviewOffset.y
+          dragPreviewOffset.y,
         );
       }
 
