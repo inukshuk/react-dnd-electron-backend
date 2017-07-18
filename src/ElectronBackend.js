@@ -276,7 +276,7 @@ export default class ElectronBackend {
     if (isEventOverInput(e)) {
       e.preventDefault();
       e.stopPropagation();
-      return false;
+      return; // eslint-disable-line no-useless-return
     }
 
     const { dragStartSourceIds } = this;

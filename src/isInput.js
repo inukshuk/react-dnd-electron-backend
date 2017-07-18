@@ -13,10 +13,6 @@ export default function isInput(element) {
   }
 }
 
-export function isEditable(element) {
-  return isInput(element) || isContentEditable(element)
-}
-
 export function isContentEditable(element) {
   if (element == null) { return false; }
   if (element.contentEditable === 'false') { return false; }
@@ -24,6 +20,10 @@ export function isContentEditable(element) {
 
   // contentEditable is set to 'inherit' -> check parents
   return isEditable(getParent(element));
+}
+
+export function isEditable(element) {
+  return isInput(element) || isContentEditable(element);
 }
 
 export function isEventOverInput(event) {
