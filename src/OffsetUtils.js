@@ -25,7 +25,12 @@ export function getEventClientOffset(e) {
   };
 }
 
-export function getDragPreviewOffset(sourceNode, dragPreview, clientOffset, anchorPoint) {
+export function getDragPreviewOffset(sourceNode,
+  dragPreview,
+  clientOffset,
+  anchorPoint,
+  offsetPoint
+) {
   // The browsers will use the image intrinsic size under different conditions.
   // Firefox only cares if it's an image, but WebKit also wants it to be detached.
   const isImage = dragPreview.nodeName === 'IMG' && (
@@ -63,8 +68,15 @@ export function getDragPreviewOffset(sourceNode, dragPreview, clientOffset, anch
     // Dock to the bottom
     offsetFromDragPreview.y + dragPreviewHeight - sourceHeight,
   ]);
-  const x = interpolantX.interpolate(anchorX);
-  const y = interpolantY.interpolate(anchorY);
+  let x = interpolantX.interpolate(anchorX);
+  let y = interpolantY.interpolate(anchorY);
+
+  // Force offsets if specified in the options.
+  const { offsetX, offsetY } = offsetPoint;
+  const forceOffsetX = offsetX === 0 || offsetX;
+  const forceOffsetY = offsetY === 0 || offsetY;
+  x = forceOffsetX ? offsetX : x;
+  y = forceOffsetY ? offsetY : y;
 
   return { x, y };
 }
