@@ -19,7 +19,7 @@ export function isContentEditable(element) {
   if (element.contentEditable === 'true') { return true; }
 
   // contentEditable is set to 'inherit' -> check parents
-  return isEditable(getParent(element));
+  return isContentEditable(getParent(element));
 }
 
 export function isEditable(element) {
