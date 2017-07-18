@@ -1,6 +1,7 @@
 import defaults from 'lodash/defaults';
 import shallowEqual from './shallowEqual';
 import EnterLeaveCounter from './EnterLeaveCounter';
+import { isEventOverInput } from './isInput';
 import { getNodeClientOffset, getEventClientOffset, getDragPreviewOffset } from './OffsetUtils';
 import { createNativeDragSource, matchNativeItemType } from './NativeDragSources';
 import * as NativeTypes from './NativeTypes';
@@ -270,6 +271,14 @@ export default class ElectronBackend {
   }
 
   handleTopDragStart(e) {
+    // Disable Dragging inside Input elements to allow
+    // for text selection etc.
+    if (isEventOverInput(e)) {
+      e.preventDefault();
+      e.stopPropagation();
+      return false;
+    }
+
     const { dragStartSourceIds } = this;
     this.dragStartSourceIds = null;
 
