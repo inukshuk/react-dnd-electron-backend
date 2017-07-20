@@ -9,23 +9,11 @@ export default function isInput(element) {
     case 'SELECT':
       return true;
     case 'LABEL':
-      // eslint-disable-next-line no-use-before-define
-      return hasChildInput(element);
+      return element.querySelector('input') != null;
     default:
       return false;
   }
 }
-
-export function hasChildInput(element) {
-  // Check only immediate children, because checkboxes
-  // are usually directly inside labels.
-  for (let i = 0; i < element.children.length; i + 1) {
-    if (isInput(element.children[i])) { return true; }
-  }
-
-  return false;
-}
-
 
 export function isContentEditable(element) {
   if (element == null) { return false; }
