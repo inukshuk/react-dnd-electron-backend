@@ -493,6 +493,10 @@ export default class ElectronBackend {
     this.dropTargetIds = [];
     e.preventDefault();
 
+    if (this.isDraggingNativeItem()) {
+      this.currentNativeSource.update(e.dataTransfer);
+    }
+
     this.enterLeaveCounter.reset();
   }
 

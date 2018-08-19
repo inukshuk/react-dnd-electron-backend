@@ -41,9 +41,12 @@ export function createNativeDragSource(type) {
   return class NativeDragSource {
     constructor(dataTransfer) {
       this.item = {
-        [exposeProperty]: getData(dataTransfer, matchesTypes),
         types: [...dataTransfer.items].map(it => it.type)
       };
+    }
+
+    update(dataTransfer) {
+      this.item[exposeProperty] = getData(dataTransfer, matchesTypes);
     }
 
     canDrag() {
