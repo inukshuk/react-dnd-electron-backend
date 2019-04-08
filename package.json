@@ -28,14 +28,16 @@
   "homepage": "https://github.com/inukshuk/react-dnd-electron-backend",
   "devDependencies": {
     "babel-cli": "^6.26.0",
-    "babel-eslint": "^8.2.6",
+    "babel-eslint": "^10.0.1",
     "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
-    "dnd-core": "^4.0.0",
-    "eslint": "^5.4.0",
-    "eslint-plugin-react": "^6.9.0",
-    "mocha": "^5.2.0"
+    "dnd-core": "^7.4.4",
+    "eslint": "^5.16.0",
+    "eslint-plugin-react": "^7.12.4",
+    "mocha": "^6.1.1"
   },
   "dependencies": {
-    "lodash": "^4.2.0"
+    "lodash.defaults": "^4.2.0",
+    "lodash.union": "^4.6.0",
+    "lodash.without": "^4.4.0"
   }
 }
